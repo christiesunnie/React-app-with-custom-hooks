@@ -1,25 +1,17 @@
 import React, { useEffect, useState } from "react";
-import youtube from "../api/youtube";
 import SearchBar from "./SearchBar";
 import VideoDetail from "./VideoDetail";
 import VideoList from "./VideoList";
+import useVideos from "../hooks/useVideos";
 
 const App = () => {
-  const [videos, setVideos] = useState([]);
   const [selectedVideo, setSelectedVideo] = useState(null);
 
+  const [videos, onTermSearch] = useVideos("monstera");
+
   useEffect(() => {
-    onTermSearch("tulips");
-  }, []);
-
-  const onTermSearch = async (term) => {
-    const response = await youtube.get("/search", {
-      params: { q: term },
-    });
-
-    setVideos(response.data.items);
-    setSelectedVideo(response.data.items[0]);
-  };
+    setSelectedVideo(videos[0]);
+  }, [videos]);
 
   return (
     <div className="ui container" style={{ marginTop: "20px" }}>
